@@ -59,7 +59,12 @@ class En(Lang):
 
         # After some amount of characters interpret utterance as new dialog.
         chars_since_dialog = self.cfg.dialog_gap + 1
+        # Keep track of the last paragraph in addition to the current one for
+        # use when including surrounding narratives.
+        last_p = ''
+        last_p_has_dialog = False
         for p in paragraph_list:
+            p_has_dialog = False
             # If the paragraph potentially contains dialog.
             if delimiter in p:
                 # If max chars exceeded start new dialog.
@@ -83,7 +88,17 @@ class En(Lang):
                             utt += segment + ' '
 
                     if good_segment:
-                        self.dialogs[-1].append(' '.join(utt.split()))
+                        p_has_dialog = True
+                        if self.cfg.include_surrounding_narratives:
+                            if not last_p_has_dialog and last_p != '':
+                                # If including surrounding narratives, add the preceding narrative unless it is
+                                # the same as the last proceeding narrative within the same dialog sequence.
+                                preceding_narrative = '[N]: %s' % last_p
+                                if len(self.dialogs[-1]) == 0 or self.dialogs[-1][-1] != preceding_narrative:
+                                    self.dialogs[-1].append(preceding_narrative)
+                            self.dialogs[-1].append('[D]: %s' % ' '.join(utt.split()))
+                        else:
+                            self.dialogs[-1].append(' '.join(utt.split()))
 
                 # Add chars after last comma.
                 if good_segment:
@@ -93,6 +108,14 @@ class En(Lang):
             else:
                 # Otherwise add the whole paragraph since there was no dialog.
                 chars_since_dialog += len(p)
+            
+            # If including surrounding narratives, add the proceeding narrative. 
+            if self.cfg.include_surrounding_narratives and last_p_has_dialog and not p_has_dialog and p != '':
+                self.dialogs[-1].append('[N]: %s' % p)
+
+            # Remember the last paragraph
+            last_p = p
+            last_p_has_dialog = p_has_dialog
 
     def clean_line(self, line):
         line = re.sub(' \' ', '\'', line)

@@ -90,7 +90,12 @@ def extract(cfg):
                 split_ind = []
                 # Remove too long utterances and split dialogs accordingly.
                 for i, u in enumerate(d):
-                    if len(u.split()) > cfg.max_length:
+                    u_words = u.split()
+                    if cfg.include_surrounding_narratives:
+                        if ((u_words[1] == '[N]:' and len(u_words) > cfg.max_narrative_length + 1) or
+                            (u_words[1] == '[D]:' and len(u_words) > cfg.max_utterance_length + 1)):
+                            split_ind.append(i)
+                    elif len(u_words) > cfg.max_utterance_length:
                         split_ind.append(i)
 
                 split_ind = zip([-1] + split_ind, split_ind + [None])
@@ -98,7 +103,7 @@ def extract(cfg):
 
                 for d in diags:
                     # Exclude single utterances.
-                    if len(d) > 1:
+                    if len(d) > (3 if cfg.include_surrounding_narratives else 1):
                         f.write('\n'.join(d))
                         f.write('\n\n')
 

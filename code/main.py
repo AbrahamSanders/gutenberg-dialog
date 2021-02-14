@@ -11,7 +11,13 @@ def main():
     parser.add_argument('-dg', '--dialog_gap', default=config.dialog_gap,
                         help='Min. number of characters between two dialogs ' +
                         '(default: %(default)s)', metavar='', type=int)
-    parser.add_argument('-ml', '--max_length', default=config.max_length,
+    parser.add_argument('-isn', '--include_surrounding_narratives', default=config.include_surrounding_narratives,
+                        help='Whether to include surrounding narratives in the output dataset',
+                        action='store_true')
+    parser.add_argument('-mnl', '--max_narrative_length', default=config.max_narrative_length,
+                        help='Max. number of words in 1 narrative ' +
+                        '(default: %(default)s)', metavar='', type=int)
+    parser.add_argument('-mul', '--max_utterance_length', default=config.max_utterance_length,
                         help='Max. number of words in 1 utterance ' +
                         '(default: %(default)s)', metavar='', type=int)
     parser.add_argument('-mb', '--max_books', default=config.max_books,
