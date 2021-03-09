@@ -72,6 +72,7 @@ class En(Lang):
                     self.dialogs.append([])
 
                 utt = ''
+                intermediate_narrative = ''
                 # Augment the segment so the splitting will always be correct.
                 segments = ('YXC' + p + 'YXC').split(delimiter)
 
@@ -86,6 +87,12 @@ class En(Lang):
                                 break
                         if i % 2 == 1:
                             utt += segment + ' '
+                        else:
+                            intermediate_narrative = segment
+                            if intermediate_narrative.startswith("YXC"):
+                                intermediate_narrative = intermediate_narrative[4:]
+                            elif intermediate_narrative.endswith("YXC"):
+                                intermediate_narrative = intermediate_narrative[:-4]
 
                     if good_segment:
                         p_has_dialog = True
