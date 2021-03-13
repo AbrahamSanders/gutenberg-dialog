@@ -71,8 +71,7 @@ class En(Lang):
                 if chars_since_dialog > self.cfg.dialog_gap:
                     self.dialogs.append([])
 
-                utt = ''
-                intermediate_narrative = ''
+                utt = []
                 # Augment the segment so the splitting will always be correct.
                 segments = ('YXC' + p + 'YXC').split(delimiter)
 
@@ -86,13 +85,15 @@ class En(Lang):
                                 good_segment = False
                                 break
                         if i % 2 == 1:
-                            utt += segment + ' '
+                            utt.append('[D]: %s' % ' '.join(segment.split()))
                         else:
-                            intermediate_narrative = segment
-                            if intermediate_narrative.startswith("YXC"):
-                                intermediate_narrative = intermediate_narrative[4:]
-                            elif intermediate_narrative.endswith("YXC"):
-                                intermediate_narrative = intermediate_narrative[:-4]
+                            if segment.startswith('YXC'):
+                                segment = segment[3:]
+                            elif segment.endswith('YXC'):
+                                segment = segment[:-3]
+                            segment = ' '.join(segment.split())
+                            if segment != '':
+                                utt.append('[N]: %s' % segment)
 
                     if good_segment:
                         p_has_dialog = True
@@ -103,9 +104,7 @@ class En(Lang):
                                 preceding_narrative = '[N]: %s' % last_p
                                 if len(self.dialogs[-1]) == 0 or self.dialogs[-1][-1] != preceding_narrative:
                                     self.dialogs[-1].append(preceding_narrative)
-                            self.dialogs[-1].append('[D]: %s' % ' '.join(utt.split()))
-                        else:
-                            self.dialogs[-1].append(' '.join(utt.split()))
+                        self.dialogs[-1].extend(utt)
 
                 # Add chars after last comma.
                 if good_segment:
