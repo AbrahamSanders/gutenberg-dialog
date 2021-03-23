@@ -92,6 +92,8 @@ class En(Lang):
                             elif segment.endswith('YXC'):
                                 segment = segment[:-3]
                             segment = ' '.join(segment.split())
+                            # remove any leading non-word characters from the narrative segment
+                            segment = re.sub(r"\A[^\w]+", "", segment)
                             if segment != '':
                                 utt.append('[N]: %s' % segment)
 
