@@ -17,6 +17,9 @@ def main():
     parser.add_argument('-mnl', '--max_narrative_length', default=config.max_narrative_length,
                         help='Max. number of words in 1 narrative ' +
                         '(default: %(default)s)', metavar='', type=int)
+    parser.add_argument('-minl', '--min_intermediate_narrative_length', default=config.min_intermediate_narrative_length,
+                        help='Min. number of words in 1 intermediate narrative (a narrative which occurs in-line with dialog) ' + 
+                        '(default: %(default)s)', metavar='', type=int)
     parser.add_argument('-mul', '--max_utterance_length', default=config.max_utterance_length,
                         help='Max. number of words in 1 utterance ' +
                         '(default: %(default)s)', metavar='', type=int)

@@ -76,26 +76,45 @@ class En(Lang):
                 segments = ('YXC' + p + 'YXC').split(delimiter)
 
                 good_segment = True
-                # Join into a single utterance since we are inside a paragraph.
+                # Parse dialog utterances and intermediate narrative segments since we are inside a paragraph.
                 if len(segments) > 2 and len(segments) % 2 == 1:
+                    combine_dialogs = True
                     for i, segment in enumerate(segments):
                         if i == 1 and len(segment):
                             # 1st utt should be upper-case to avoid artifacts.
-                            if segment[0] == segment[0].lower():
+                            # Sometimes the 1st character can be a non-word character like an underscore for effect,
+                            # in which case we want to see if the second character is upper-case.
+                            upper_pos = 1 if (len(segment) > 1 and re.match('[^a-zA-Z0-9 ]', segment[0])) else 0
+                            if segment[upper_pos] == segment[upper_pos].lower():
                                 good_segment = False
                                 break
                         if i % 2 == 1:
-                            utt.append('[D]: %s' % ' '.join(segment.split()))
-                        else:
+                            # Handle dialog utterances
+                            if combine_dialogs and len(utt) > 0:
+                                utt[-1] += ' %s' % ' '.join(segment.split())
+                            else:
+                                prefix = '[D]: ' if self.cfg.include_surrounding_narratives else ''
+                                utt.append('%s%s' % (prefix, ' '.join(segment.split())))                                
+                        elif self.cfg.include_surrounding_narratives:
+                            # Handle intermediate narrative segments 
+                            # (nested before, between, or after dialog utterances within the same paragraph)
                             if segment.startswith('YXC'):
                                 segment = segment[3:]
                             elif segment.endswith('YXC'):
                                 segment = segment[:-3]
-                            segment = ' '.join(segment.split())
-                            # remove any leading non-word characters from the narrative segment
-                            segment = re.sub(r"\A[^\w]+", "", segment)
-                            if segment != '':
-                                utt.append('[N]: %s' % segment)
+                            sub_segments = segment.split()
+                            # If we omit an intermediate narrative which is too short, any immediately following dialog
+                            # within the same paragraph should be combined with the previous one.
+                            combine_dialogs = True
+                            if len(sub_segments) >= self.cfg.min_intermediate_narrative_length:
+                                segment = ' '.join(sub_segments)
+                                # remove any leading non-word or non-opening characters from the narrative segment
+                                segment = re.sub(r'\A[^\w([{`\'‘"“-]+', '', segment)
+                                if segment != '':
+                                    utt.append('[N]: %s' % segment)
+                                    # We did not omit this narrative segment so we won't combine
+                                    # any immediately following dialog.
+                                    combine_dialogs = False
 
                     if good_segment:
                         p_has_dialog = True
