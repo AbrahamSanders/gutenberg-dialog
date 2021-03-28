@@ -5,7 +5,8 @@ import os
 class Config:
     dialog_gap = 150
     include_surrounding_narratives = False
-    max_narrative_length = 250  # max number of words in 1 narrative (500)
+    max_narrative_length = 250  # max number of words in 1 narrative (250)
+    min_intermediate_narrative_length = 5  # min number of words in 1 intermediate narrative (5)
     max_utterance_length = 100  # max number of words in 1 utterance (100)
     max_books = 100000  # limit size of the dataset
     min_delimiters = 150  # per 10.000 words (150)
