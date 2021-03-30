@@ -93,9 +93,11 @@ def extract(cfg):
                 for i, u in enumerate(d):
                     u_words = u.split()
                     if cfg.include_surrounding_narratives:
-                        if ((u_words[1] == '[N]:' and (len(u_words) > cfg.max_narrative_length + 1 or 
-                                                       re.match(r'\A[‘"“]', u_words[2]))) or
-                            (u_words[1] == '[D]:' and len(u_words) > cfg.max_utterance_length + 1)):
+                        if (len(u_words) > 1 and (
+                                (u_words[1] == '[N]:' and len(u_words) > cfg.max_narrative_length + 1) or 
+                                (u_words[1] == '[N]:' and len(u_words) > 2 and re.match(r'\A[‘"“]', u_words[2])) or
+                                (u_words[1] == '[D]:' and len(u_words) > cfg.max_utterance_length + 1)
+                            )):
                             split_ind.append(i)
                     elif len(u_words) > cfg.max_utterance_length:
                         split_ind.append(i)
