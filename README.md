@@ -18,7 +18,7 @@ Code for downloading and building your own version of the [Gutenberg Dialog Data
 
 ## Download narrative-aligned datasets
 
-|Download link | # of utterances | Avg. utterance length | # of narratives | Avg. narrative length | # of dialogues | Avg. dialogue length (utterances only) | Avg. dialogue length |
+|Download link | Number of utterances | Average utterance length | Number of narratives | Average narrative length | Number of dialogues | Average dialogue length (utterances only) | Average dialogue length |
 | :--- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | 
 |[**English**](https://drive.google.com/file/d/17UyDfMsC7aBWbY-4okpqqqKWZQf2Yrm0/view?usp=sharing)| 12 564 893 | 9.90 | 8 832 312 | 19.14 | 2 756 600 | 4.56 | 7.76 |
 
