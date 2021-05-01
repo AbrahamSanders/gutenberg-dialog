@@ -16,6 +16,11 @@ Code for downloading and building your own version of the [Gutenberg Dialog Data
 |[**Hungarian**](https://mega.nz/file/GNFCUJhS#8uEsZa53uCTEzI04_TzzDHmvGmfgbpXAhY5N-unPStM) | 18 816 | 14.68 | 2 826 | 6.66 |
 |[**Portuguese**](https://mega.nz/file/eMkgmRIC#7zdi0VGhCZSG2ULqFi6MU0NXndwlhgTEJCaXcvki8sA) | 16 228 | 21.40 | 2 233 | 7.27 |
 
+## Download narrative-aligned datasets
+
+|Download link | # of utterances | Avg. utterance length | # of narratives | Avg. narrative length | # of dialogues | Avg. dialogue length (utterances only) | Avg. dialogue length |
+| :--- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | 
+|[**English**](https://drive.google.com/file/d/17UyDfMsC7aBWbY-4okpqqqKWZQf2Yrm0/view?usp=sharing)| 12 564 893 | 9.90 | 8 832 312 | 19.14 | 2 756 600 | 4.56 | 7.76 |
 
 ## Download resources for The Gutenberg Dialogue Dataset paper
 #### Download responses from GPT2 trainings [here](https://mega.nz/file/KEkmFBIS#jI4CNeUifjSjVytayl7pXZHiUOMConFifeusP_rUb1c)
